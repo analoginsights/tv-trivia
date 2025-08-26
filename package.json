@@ -6,22 +6,46 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "etl:bravo": "tsx scripts/etl-bravo-data.ts",
+    "etl:bravo:enhanced": "tsx scripts/etl-bravo-enhanced.ts",
+    "etl:bravo:test": "tsx scripts/etl-bravo-enhanced-test.ts",
+    "etl:bravo:optimized": "tsx scripts/etl-bravo-enhanced-optimized.ts",
+    "etl:eligibility": "tsx scripts/derive-eligibility.ts",
+    "etl:quality": "tsx scripts/data-quality-checks.ts",
+    "etl:generate-puzzle": "tsx scripts/generate-daily-puzzle.ts",
+    "puzzle:simple": "tsx scripts/generate-puzzle-simple.ts",
+    "puzzle:smart": "tsx scripts/smart-puzzle-generator.ts",
+    "analyze:intersections": "tsx scripts/analyze-intersections.ts",
+    "puzzle:valid": "tsx scripts/generate-valid-puzzle.ts",
+    "puzzle:minimal": "tsx scripts/create-minimal-puzzle.ts",
+    "etl:all": "npm run etl:bravo && npm run etl:eligibility && npm run etl:quality",
+    "test:api": "tsx scripts/test-api-endpoints.ts",
+    "test:full": "./scripts/test-with-server.sh",
+    "verify:schema": "tsx scripts/verify-schema.ts",
+    "analyze:enhanced": "tsx scripts/analyze-enhanced-data.ts",
+    "fix:eligibility": "tsx scripts/fix-eligibility.ts",
+    "fix:eligibility:safe": "tsx scripts/fix-eligibility-safe.ts",
+    "supabase:tasks": "tsx scripts/run-supabase-tasks.ts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.56.0",
+    "next": "15.5.0",
     "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.5.0"
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
+    "dotenv": "^17.2.1",
     "eslint": "^9",
     "eslint-config-next": "15.5.0",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4",
+    "tsx": "^4.20.5",
+    "typescript": "^5"
   }
 }
