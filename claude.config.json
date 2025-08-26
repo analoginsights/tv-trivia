@@ -1,0 +1,20 @@
+{
+    "commands": [
+        {
+            "name": "/commit",
+            "description": "Stage, commit, and push all changes with a provided commit message",
+            "args": [
+                {
+                    "name": "message",
+                    "description": "Commit message to use for the commit",
+                    "required": true
+                }
+            ],
+            "steps": [
+                "git add -A",
+                "git commit -m \"{{message}}\"",
+                "git push origin $(git rev-parse --abbrev-ref HEAD)"
+            ]
+        }
+    ]
+}

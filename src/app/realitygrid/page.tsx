@@ -182,7 +182,7 @@ export default function RealityGrid() {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading today's puzzle...</p>
+          <p className="mt-4 text-gray-600">Loading today&apos;s puzzle...</p>
         </div>
       </div>
     )
@@ -193,7 +193,7 @@ export default function RealityGrid() {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Reality Grid</h1>
-          <p className="text-red-600">Failed to load today's puzzle. Please try again later.</p>
+          <p className="text-red-600">Failed to load today&apos;s puzzle. Please try again later.</p>
         </div>
       </div>
     )
@@ -231,7 +231,7 @@ export default function RealityGrid() {
         {gameState.gameComplete && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
             <h2 className="text-lg font-semibold text-green-800">🎉 Congratulations!</h2>
-            <p className="text-green-700">You completed today's Reality Grid!</p>
+            <p className="text-green-700">You completed today&apos;s Reality Grid!</p>
             <button
               onClick={resetGame}
               className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"

@@ -59,7 +59,7 @@ export async function getShowCredits(tvId: number): Promise<TMDBCredits> {
     return await tmdbFetch<TMDBCredits>(`/tv/${tvId}/aggregate_credits`, {
       language: TMDB_LANG
     })
-  } catch (error) {
+  } catch {
     console.log(`Falling back to regular credits for show ${tvId}`)
     return await tmdbFetch<TMDBCredits>(`/tv/${tvId}/credits`, {
       language: TMDB_LANG

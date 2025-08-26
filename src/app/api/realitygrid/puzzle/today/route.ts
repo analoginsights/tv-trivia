@@ -48,12 +48,12 @@ export async function GET() {
     const response = {
       puzzle_id: puzzle.id,
       date: puzzle.date,
-      rows: puzzle.row_show_ids.map(id => ({
+      rows: puzzle.row_show_ids.map((id: number) => ({
         id,
         name: showsMap.get(id)?.name || 'Unknown',
         poster_path: showsMap.get(id)?.poster_path || null
       })),
-      cols: puzzle.col_show_ids.map(id => ({
+      cols: puzzle.col_show_ids.map((id: number) => ({
         id,
         name: showsMap.get(id)?.name || 'Unknown',
         poster_path: showsMap.get(id)?.poster_path || null

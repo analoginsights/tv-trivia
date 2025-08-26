@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
       throw error
     }
     
-    const results = data?.map((person: any) => ({
+    const results = data?.map((person: { id: number; name: string; profile_path: string | null; show_count: number }) => ({
       id: person.id,
       name: person.name,
       profile_url: person.profile_path 

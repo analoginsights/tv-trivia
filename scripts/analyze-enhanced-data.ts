@@ -43,7 +43,7 @@ async function analyzeEnhancedData() {
     .select('id', { count: 'exact', head: true })
     .eq('is_valid', true)
   
-  console.log(`Eligible people (≥3 shows): ${eligiblePeople} (${((eligiblePeople! / peopleCount!) * 100).toFixed(1)}%)`)
+  console.log(`Eligible people (≥3 shows): ${eligiblePeople} (${((Number(eligiblePeople) / Number(peopleCount)) * 100).toFixed(1)}%)`)
   
   // Appearance kind breakdown
   console.log('\n=== Appearance Type Breakdown ===')
