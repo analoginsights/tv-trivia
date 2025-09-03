@@ -27,14 +27,25 @@ export async function GET() {
     
     const person = dailyData.gwb_people
     
-    // Get the stored image from S3 bucket for canvas pixelation
-    const storagePath = `bravo/people/${person.id}/${dailyData.date_utc}.jpg`
-    const { data: imageData } = supabase.storage
-      .from('gwb')
-      .getPublicUrl(storagePath)
+    // Use the image URL from the database or fallback to storage
+    let imageUrl = person.image_url
     
-    const imageUrl = imageData.publicUrl
-    console.log(`Serving stored image: ${imageUrl}`)
+    if (!imageUrl) {
+      // Fallback to storage bucket if no image_url in database
+      const storagePath = `bravo/people/${person.id}/${dailyData.date_utc}.jpg`
+      const { data: imageData } = supabase.storage
+        .from('gwb')
+        .getPublicUrl(storagePath)
+      imageUrl = imageData.publicUrl
+    }
+    
+    // If it's an external image that needs proxying for CORS
+    if (imageUrl && imageUrl.includes('tmdb.org')) {
+      imageUrl = `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`
+    }
+    // Placeholder services already handle CORS, no proxy needed
+    
+    console.log(`Serving image: ${imageUrl}`)
     
     const response = {
       date: dailyData.date_utc,

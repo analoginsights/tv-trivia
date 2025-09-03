@@ -8,8 +8,14 @@ export async function GET(request: NextRequest) {
     return new NextResponse('Missing url parameter', { status: 400 })
   }
   
-  // Validate that it's a TMDB image URL for security
-  if (!imageUrl.startsWith('https://image.tmdb.org/')) {
+  // Validate that it's a safe image URL for security
+  const allowedDomains = [
+    'https://image.tmdb.org/',
+    'https://via.placeholder.com/',
+    'https://placehold.co/'
+  ]
+  
+  if (!allowedDomains.some(domain => imageUrl.startsWith(domain))) {
     return new NextResponse('Invalid image URL', { status: 400 })
   }
   
