@@ -1,9 +1,11 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const today = new Date().toISOString().split('T')[0]
+    const { searchParams } = new URL(request.url)
+    const clientId = searchParams.get('client_id')
     
     // Get today's daily person with person details
     const { data: dailyData, error: dailyError } = await supabase
@@ -47,6 +49,29 @@ export async function GET() {
     
     console.log(`Serving image: ${imageUrl}`)
     
+    // Check if client has already played this puzzle
+    let gameStatus = null
+    if (clientId) {
+      const { data: guesses } = await supabase
+        .from('gwb_guesses')
+        .select('guess_order, is_correct')
+        .eq('play_date_utc', today)
+        .eq('client_id', clientId)
+        .order('guess_order', { ascending: true })
+      
+      if (guesses && guesses.length > 0) {
+        const hasWon = guesses.some(g => g.is_correct)
+        const guessesUsed = guesses.length
+        
+        gameStatus = {
+          already_played: true,
+          has_won: hasWon,
+          guesses_used: guessesUsed,
+          is_complete: hasWon || guessesUsed >= 6
+        }
+      }
+    }
+    
     const response = {
       date: dailyData.date_utc,
       person: {
@@ -67,7 +92,8 @@ export async function GET() {
       },
       reveal_schedule_seconds: [18, 15, 12, 9, 6, 3, 0],
       total_time_seconds: 20,
-      max_guesses: 6
+      max_guesses: 6,
+      game_status: gameStatus
     }
     
     return NextResponse.json(response)

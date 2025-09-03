@@ -6,8 +6,13 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { client_id, play_date, guess_text, elapsed_ms } = body
 
-    if (!client_id || !play_date || typeof guess_text !== 'string' || typeof elapsed_ms !== 'number') {
+    if (!client_id || !play_date || typeof elapsed_ms !== 'number') {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+    }
+
+    // Allow empty guess_text for "I Don't Know" submissions
+    if (typeof guess_text !== 'string') {
+      return NextResponse.json({ error: 'Invalid guess format' }, { status: 400 })
     }
 
     // Get today's puzzle with person details
@@ -54,11 +59,28 @@ export async function POST(request: NextRequest) {
     const correctName = dailyData.gwb_people.full_name.toLowerCase().trim()
     const userGuess = guess_text.toLowerCase().trim()
     
-    // Simple name matching - can be enhanced with fuzzy matching
-    const isCorrect = correctName === userGuess || 
-                      correctName.includes(userGuess) ||
-                      userGuess.includes(correctName.split(' ')[0]) || // First name match
-                      userGuess.includes(correctName.split(' ').slice(-1)[0]) // Last name match
+    // If empty guess (I Don't Know), it's always incorrect
+    if (userGuess === '') {
+      var isCorrect = false
+    } else {
+      // Improved name matching logic
+      const correctNameParts = correctName.split(' ')
+      const userGuessParts = userGuess.split(' ')
+      
+      var isCorrect = 
+        // Exact match
+        correctName === userGuess ||
+        // Full name contains the guess (but not too short to avoid false positives)
+        (userGuess.length >= 3 && correctName.includes(userGuess)) ||
+        // First name exact match
+        correctNameParts[0] === userGuess ||
+        // Last name exact match  
+        correctNameParts[correctNameParts.length - 1] === userGuess ||
+        // Both first and last name provided and match
+        (userGuessParts.length >= 2 && 
+         correctNameParts[0] === userGuessParts[0] && 
+         correctNameParts[correctNameParts.length - 1] === userGuessParts[userGuessParts.length - 1])
+    }
 
     const nextGuessOrder = guessesUsed + 1
 
@@ -80,10 +102,16 @@ export async function POST(request: NextRequest) {
 
     const response = {
       correct: isCorrect,
-      normalized_match: isCorrect ? dailyData.gwb_people.full_name : null,
+      answer: isCorrect ? dailyData.gwb_people.full_name : null,
       guesses_used: nextGuessOrder,
       guesses_left: 6 - nextGuessOrder,
-      timer_should_pause: true
+      max_guesses: 6,
+      is_game_over: isCorrect || nextGuessOrder >= 6,
+      message: isCorrect 
+        ? `Correct! It's ${dailyData.gwb_people.full_name}` 
+        : nextGuessOrder >= 6 
+        ? `Game over! The answer was ${dailyData.gwb_people.full_name}`
+        : `Incorrect. ${6 - nextGuessOrder} guesses remaining.`
     }
 
     return NextResponse.json(response)

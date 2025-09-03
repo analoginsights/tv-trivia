@@ -12,6 +12,9 @@ export default function Header() {
             <Link href="/" className="hover:text-gray-300 transition-colors">
               Home
             </Link>
+            <Link href="/guesswho" className="hover:text-gray-300 transition-colors">
+              GuessWho
+            </Link>
             <Link href="/realitygrid" className="hover:text-gray-300 transition-colors">
               Reality Grid
             </Link>
