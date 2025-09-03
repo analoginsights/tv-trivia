@@ -268,8 +268,9 @@ export default function GuessWho() {
               <PixelatedImage
                 src={puzzle.person.image_urls.original}
                 pixelSize={gameState.isGameOver ? 1 : currentPixelSize}
-                width={400}
-                height={400}
+                width={300}
+                height={450}
+                objectFit="cover"
                 className="rounded-lg"
                 alt={gameState.isGameOver && gameState.hasWon ? puzzle.person.full_name : "Mystery Bravo personality"}
               />
