@@ -1,19 +1,30 @@
-import { z } from 'zod'
+// Environment configuration with optional validation
+// Note: We don't enforce validation here to avoid runtime crashes
+// The actual environment variables are accessed directly in the files that need them
 
-const envSchema = z.object({
-  // Supabase
-  NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
-  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
+export const envConfig = {
+  // Helper to check if running in browser
+  isClient: typeof window !== 'undefined',
   
-  // Storage/Assets  
-  NEXT_PUBLIC_SUPABASE_BUCKET: z.string().min(1).optional(),
-  NEXT_PUBLIC_SUPABASE_STORAGE_URL: z.string().url().optional(),
+  // Helper to safely get env vars
+  get: (key: string): string | undefined => {
+    if (typeof process !== 'undefined' && process.env) {
+      return process.env[key]
+    }
+    return undefined
+  },
   
-  // External APIs
-  TMDB_API_KEY: z.string().min(1).optional(),
-})
-
-export const env = envSchema.parse(process.env)
-
-export type Env = z.infer<typeof envSchema>
+  // List of expected environment variables for documentation
+  expected: {
+    client: [
+      'NEXT_PUBLIC_SUPABASE_URL',
+      'NEXT_PUBLIC_SUPABASE_ANON_KEY',
+      'NEXT_PUBLIC_SUPABASE_BUCKET',
+      'NEXT_PUBLIC_SUPABASE_STORAGE_URL',
+    ],
+    server: [
+      'SUPABASE_SERVICE_ROLE_KEY',
+      'TMDB_API_KEY',
+    ]
+  }
+}

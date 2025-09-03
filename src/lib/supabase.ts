@@ -1,18 +1,17 @@
 import { createClient } from '@supabase/supabase-js'
-import { env } from './config/env'
 
-export const supabase = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseServiceRole = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
-export const supabaseAdmin = createClient(
-  env.NEXT_PUBLIC_SUPABASE_URL, 
-  env.SUPABASE_SERVICE_ROLE_KEY!, 
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false
-    }
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRole, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
   }
-)
+})
 
 export type Show = {
   id: number

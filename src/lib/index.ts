@@ -5,7 +5,7 @@ export { default as PixelatedImage } from './components/PixelatedImage'
 export { useRevealPixelSize, REVEAL_CONSTANTS } from './hooks/useRevealPixelSize'
 
 // Config
-export * from './config/env'
+export { envConfig } from './config/env'
 export * from './config/game'
 
 // Database & APIs
