@@ -26,7 +26,13 @@ export async function GET(request: NextRequest) {
     }
     
     // Format results for autocomplete
-    const results = (searchResults || []).map((person: any) => ({
+    const results = (searchResults || []).map((person: {
+      id: number
+      full_name: string
+      first_name: string | null
+      last_name: string | null
+      aliases: string[] | null
+    }) => ({
       id: person.id,
       full_name: person.full_name,
       first_name: person.first_name,

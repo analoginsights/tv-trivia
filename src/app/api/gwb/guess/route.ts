@@ -60,14 +60,15 @@ export async function POST(request: NextRequest) {
     const userGuess = guess_text.toLowerCase().trim()
     
     // If empty guess (I Don't Know), it's always incorrect
+    let isCorrect: boolean
     if (userGuess === '') {
-      var isCorrect = false
+      isCorrect = false
     } else {
       // Improved name matching logic
       const correctNameParts = correctName.split(' ')
       const userGuessParts = userGuess.split(' ')
       
-      var isCorrect = 
+      isCorrect = 
         // Exact match
         correctName === userGuess ||
         // Full name contains the guess (but not too short to avoid false positives)

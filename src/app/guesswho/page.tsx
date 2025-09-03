@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { PixelatedImage, useRevealPixelSize, Typeahead } from '@/lib'
 
 interface DailyPuzzle {
@@ -97,7 +97,7 @@ export default function GuessWho() {
         }
       } catch (err) {
         console.error('Error loading puzzle:', err)
-        setError('Failed to load today\'s puzzle. Please try again later.')
+        setError('Failed to load today&apos;s puzzle. Please try again later.')
       } finally {
         setIsLoading(false)
       }
@@ -241,11 +241,6 @@ export default function GuessWho() {
     return `GuessWho Bravo ${puzzle?.date} ${result}\n${guessEmojis.join('')}`
   }
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !gameState.isPaused && gameState.currentGuess.trim()) {
-      submitGuess(gameState.currentGuess.trim())
-    }
-  }
 
   if (!isMounted || isLoading) {
     return (
@@ -414,7 +409,7 @@ export default function GuessWho() {
                 </div>
               ) : (
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-bold text-red-600">Time's Up!</h2>
+                  <h2 className="text-2xl font-bold text-red-600">Time&apos;s Up!</h2>
                   <p className="text-lg font-semibold">The answer was: {puzzle.person.full_name}</p>
                   <p className="text-gray-600">Better luck tomorrow!</p>
                 </div>
@@ -452,7 +447,7 @@ export default function GuessWho() {
             </li>
             <li className="flex items-start gap-3">
               <span className="text-lg">❓</span>
-              <span className="font-medium">Click "I Don't Know" to skip if you're stuck</span>
+              <span className="font-medium">Click &quot;I Don&apos;t Know&quot; to skip if you&apos;re stuck</span>
             </li>
             <li className="flex items-start gap-3">
               <span className="text-lg">🔄</span>
