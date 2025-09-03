@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { PixelatedImage, useRevealPixelSize } from '@/lib'
+import { PixelatedImage, useRevealPixelSize, Typeahead } from '@/lib'
 
 interface DailyPuzzle {
   date: string
@@ -310,16 +310,27 @@ export default function GuessWho() {
 
           {gameState.gameStarted && !gameState.isGameOver && (
             <div className="space-y-4">
-              {/* Input */}
+              {/* Input with Typeahead */}
               <div>
-                <input
-                  type="text"
+                <Typeahead
                   value={gameState.currentGuess}
-                  onChange={(e) => setGameState(prev => ({ ...prev, currentGuess: e.target.value }))}
-                  onKeyPress={handleKeyPress}
+                  onChange={(value) => setGameState(prev => ({ ...prev, currentGuess: value }))}
+                  onSelect={(person) => {
+                    setGameState(prev => ({ ...prev, currentGuess: person.full_name }))
+                    // Auto-submit when a person is selected from typeahead
+                    setTimeout(() => handleSubmitGuess(), 100)
+                  }}
+                  onEnterPress={(value) => {
+                    if (!gameState.isPaused && value.trim()) {
+                      submitGuess(value.trim())
+                    }
+                  }}
+                  searchEndpoint="/api/gwb/people/search"
                   placeholder="Who is this Bravo personality?"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="px-4 py-3 text-lg"
                   disabled={gameState.isPaused}
+                  minLength={2}
+                  debounceMs={300}
                 />
               </div>
 

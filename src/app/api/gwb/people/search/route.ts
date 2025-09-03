@@ -10,11 +10,16 @@ export async function GET(request: NextRequest) {
       return NextResponse.json([])
     }
     
-    // Use the search function we created
+    // Search people by full name using text search
+    const searchQuery = query.trim().toLowerCase()
+    
     const { data: searchResults, error: searchError } = await supabase
-      .rpc('gwb_people_search', {
-        search_query: query.trim()
-      })
+      .from('gwb_people')
+      .select('id, full_name, first_name, last_name, aliases')
+      .eq('is_active', true)
+      .or(`full_name.ilike.%${searchQuery}%,first_name.ilike.%${searchQuery}%,last_name.ilike.%${searchQuery}%`)
+      .order('full_name')
+      .limit(20)
     
     if (searchError) {
       throw searchError
@@ -26,8 +31,7 @@ export async function GET(request: NextRequest) {
       full_name: person.full_name,
       first_name: person.first_name,
       last_name: person.last_name,
-      aliases: person.aliases || [],
-      similarity_score: person.similarity_score
+      aliases: person.aliases || []
     }))
     
     return NextResponse.json(results)

@@ -1,5 +1,6 @@
 // Components
 export { default as PixelatedImage } from './components/PixelatedImage'
+export { default as Typeahead } from './components/Typeahead'
 
 // Hooks
 export { useRevealPixelSize, REVEAL_CONSTANTS } from './hooks/useRevealPixelSize'
