@@ -1,0 +1,40 @@
+# Safe deletion candidates - temporary/unused files
+# Note: env-loader.ts is KEPT (used by many scripts)
+# Note: debug-eligibility.ts is KEPT (modified recently)
+
+# SQL files that appear to be temp/test data:
+scripts/create-sample-data.sql
+scripts/real-bravo-data.sql
+scripts/fix-function.sql
+scripts/new-guesswho-schema.sql
+
+# Duplicate ETL scripts (keeping the ones referenced in package.json):
+scripts/etl-bravo-final.ts
+scripts/etl-bravo-fixed.ts
+scripts/etl-bravo-fixed-chunked.ts
+scripts/etl-bravo-fixed-excluded.ts
+
+# Test/debug scripts that aren't in package.json and appear experimental:
+scripts/test-etl-fixed.ts
+scripts/investigate-database.ts
+scripts/reconcile-data.ts
+
+# Analysis scripts that appear to be one-off investigations:
+scripts/analyze-foreign-key-issues.ts
+scripts/investigate-distribution-issue.ts
+scripts/debug-etl-data.ts
+
+# Data integrity scripts that may be one-off fixes:
+scripts/check-data-integrity.ts
+scripts/check-foreign-keys.ts
+scripts/clean-corrupted-data.ts
+
+# Utility scripts no longer referenced:
+scripts/fetch-bravo-data.ts
+scripts/setup-supabase.ts
+scripts/run-schema.ts
+scripts/test-upsert.ts
+
+# Empty directories (if created):
+src/components/
+src/hooks/

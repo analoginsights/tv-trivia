@@ -43,6 +43,13 @@ export default function RealityGrid() {
   const [isLoading, setIsLoading] = useState(true)
   const [isSearching, setIsSearching] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const [showSolutionsModal, setShowSolutionsModal] = useState(false)
+  const [selectedCellSolutions, setSelectedCellSolutions] = useState<{
+    solutions: Person[]
+    rowShow: string
+    colShow: string
+    count: number
+  } | null>(null)
 
   // Helper function to convert cells array to 2D grid
   const getCellCounts = (puzzle: Puzzle): number[][] => {
@@ -164,6 +171,34 @@ export default function RealityGrid() {
 
     } catch (error) {
       console.error('Validation failed:', error)
+    }
+  }
+
+  const showSolutions = async (row: number, col: number) => {
+    if (!puzzle) return
+
+    try {
+      const response = await fetch('/api/realitygrid/solutions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          row_show_id: puzzle.rows[row].id,
+          col_show_id: puzzle.cols[col].id
+        })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setSelectedCellSolutions({
+          solutions: data.solutions,
+          rowShow: puzzle.rows[row].name,
+          colShow: puzzle.cols[col].name,
+          count: data.count
+        })
+        setShowSolutionsModal(true)
+      }
+    } catch (error) {
+      console.error('Failed to fetch solutions:', error)
     }
   }
 
@@ -289,6 +324,7 @@ export default function RealityGrid() {
                           'bg-white border-gray-300 hover:bg-gray-50'}
                       `}
                       onClick={() => !isEmpty && selectCell(rowIdx, colIdx)}
+                      onDoubleClick={() => !isEmpty && showSolutions(rowIdx, colIdx)}
                     >
                       <div className="h-full flex items-center justify-center p-2">
                         {isEmpty ? (
@@ -363,11 +399,81 @@ export default function RealityGrid() {
           <h3 className="font-semibold text-blue-800 mb-2">How to Play</h3>
           <ul className="text-sm text-blue-700 space-y-1">
             <li>• Click on a grid cell to select it</li>
+            <li>• Double-click on a cell to see all possible solutions</li>
             <li>• Search for a person who appeared on both shows</li>
             <li>• Green cells indicate correct answers, red cells indicate mistakes</li>
             <li>• Complete all valid cells to win!</li>
           </ul>
         </div>
+
+        {/* Solutions Modal */}
+        {showSolutionsModal && selectedCellSolutions && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
+              <div className="p-6 border-b">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-xl font-bold text-gray-900">
+                    All Solutions
+                  </h2>
+                  <button
+                    onClick={() => setShowSolutionsModal(false)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <span className="text-2xl">&times;</span>
+                  </button>
+                </div>
+                <p className="text-gray-600 mt-2">
+                  People who appeared on both <span className="font-semibold">{selectedCellSolutions.rowShow}</span> and <span className="font-semibold">{selectedCellSolutions.colShow}</span>
+                </p>
+                <p className="text-sm text-gray-500 mt-1">
+                  {selectedCellSolutions.count} {selectedCellSolutions.count === 1 ? 'person' : 'people'} found
+                </p>
+              </div>
+              
+              <div className="p-6 overflow-y-auto max-h-96">
+                {selectedCellSolutions.solutions.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {selectedCellSolutions.solutions.map((person) => (
+                      <div
+                        key={person.id}
+                        className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
+                      >
+                        {person.profile_url ? (
+                          <img
+                            src={person.profile_url}
+                            alt={person.name}
+                            className="w-12 h-12 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
+                            <span className="text-gray-600 text-xs">No Photo</span>
+                          </div>
+                        )}
+                        <div>
+                          <div className="font-medium text-gray-900">{person.name}</div>
+                          <div className="text-sm text-gray-500">Reality TV Personality</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-500 py-8">
+                    <p>No people found who appeared on both shows.</p>
+                  </div>
+                )}
+              </div>
+              
+              <div className="p-4 bg-gray-50 rounded-b-lg">
+                <button
+                  onClick={() => setShowSolutionsModal(false)}
+                  className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

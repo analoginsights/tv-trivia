@@ -26,10 +26,11 @@ async function debugEligibility() {
     if (multiError) {
       console.log('   ⚠️ RPC not available, doing manual check...')
       
-      // Manual check for people with multiple show appearances
+      // Manual check for people with multiple show appearances (use .range to get all data)
       const { data: appearances, error: appearError } = await supabaseAdmin
         .from('rg_appearances')
         .select('person_id, show_id')
+        .range(0, 9999) // Handle more than 1000 rows
       
       if (appearError) throw appearError
       

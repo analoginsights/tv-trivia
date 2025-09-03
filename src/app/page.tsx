@@ -27,6 +27,21 @@ export default function Home() {
             </div>
           </Link>
           
+          <Link 
+            href="/guesswho"
+            className="group bg-white border-2 border-gray-200 rounded-lg p-6 hover:border-blue-500 hover:shadow-lg transition-all"
+          >
+            <h2 className="text-2xl font-semibold mb-3 group-hover:text-blue-600">
+              Guess Who
+            </h2>
+            <p className="text-gray-600">
+              Can you guess the celebrity from their TV appearances? Test your knowledge!
+            </p>
+            <div className="mt-4 text-blue-600 font-medium group-hover:underline">
+              Play Now →
+            </div>
+          </Link>
+          
           <div className="bg-gray-100 border-2 border-gray-200 rounded-lg p-6 opacity-60">
             <h2 className="text-2xl font-semibold mb-3 text-gray-500">
               More Games
