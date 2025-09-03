@@ -247,7 +247,7 @@ export default function GuessWho() {
       <div className="max-w-2xl mx-auto px-4 py-12">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading today's puzzle...</p>
+          <p className="mt-4 text-gray-600">Loading today&apos;s puzzle...</p>
         </div>
       </div>
     )
@@ -389,7 +389,7 @@ export default function GuessWho() {
                   disabled={gameState.isPaused}
                   className="w-full px-4 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-full font-semibold shadow-md hover:shadow-lg hover:from-gray-700 hover:to-gray-800 transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed"
                 >
-                  I Don't Know
+                  I Don&apos;t Know
                 </button>
               </div>
             </div>
