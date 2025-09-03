@@ -6,14 +6,15 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // Admin client is only available server-side
-export const supabaseAdmin = typeof window === 'undefined' && process.env.SUPABASE_SERVICE_ROLE_KEY
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const supabaseAdmin: any = typeof window === 'undefined' && process.env.SUPABASE_SERVICE_ROLE_KEY
   ? createClient(supabaseUrl, process.env.SUPABASE_SERVICE_ROLE_KEY, {
       auth: {
         autoRefreshToken: false,
         persistSession: false
       }
     })
-  : null as any
+  : null
 
 export type Show = {
   id: number
