@@ -55,8 +55,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No more guesses allowed' }, { status: 400 })
     }
 
+    // Handle case where gwb_people might be an array
+    const person = Array.isArray(dailyData.gwb_people) 
+      ? dailyData.gwb_people[0] 
+      : dailyData.gwb_people
+    
+    if (!person) {
+      return NextResponse.json({ error: 'Person data not found' }, { status: 500 })
+    }
+    
     // Validate guess
-    const correctName = dailyData.gwb_people.full_name.toLowerCase().trim()
+    const correctName = person.full_name.toLowerCase().trim()
     const userGuess = guess_text.toLowerCase().trim()
     
     // If empty guess (I Don't Know), it's always incorrect
@@ -103,15 +112,15 @@ export async function POST(request: NextRequest) {
 
     const response = {
       correct: isCorrect,
-      answer: isCorrect ? dailyData.gwb_people.full_name : null,
+      answer: isCorrect ? person.full_name : null,
       guesses_used: nextGuessOrder,
       guesses_left: 6 - nextGuessOrder,
       max_guesses: 6,
       is_game_over: isCorrect || nextGuessOrder >= 6,
       message: isCorrect 
-        ? `Correct! It's ${dailyData.gwb_people.full_name}` 
+        ? `Correct! It's ${person.full_name}` 
         : nextGuessOrder >= 6 
-        ? `Game over! The answer was ${dailyData.gwb_people.full_name}`
+        ? `Game over! The answer was ${person.full_name}`
         : `Incorrect. ${6 - nextGuessOrder} guesses remaining.`
     }
 
