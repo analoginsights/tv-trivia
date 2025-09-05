@@ -47,7 +47,15 @@ export async function GET() {
       return NextResponse.json({ error: 'No daily puzzle found' }, { status: 404 })
     }
     
-    const person = dailyData.gwb_people
+    // gwb_people might be an array, so handle it properly
+    const person = Array.isArray(dailyData.gwb_people) 
+      ? dailyData.gwb_people[0] 
+      : dailyData.gwb_people
+    
+    if (!person) {
+      return NextResponse.json({ error: 'Person data not found' }, { status: 404 })
+    }
+    
     const tmdbPersonId = getTmdbPersonId(person.id, person.full_name)
     
     console.log(`Person: ${person.full_name} (DB ID: ${person.id}) -> TMDB ID: ${tmdbPersonId}`)
