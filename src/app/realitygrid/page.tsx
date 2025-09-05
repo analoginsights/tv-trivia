@@ -438,9 +438,9 @@ export default function RealityGrid() {
                         key={person.id}
                         className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
                       >
-                        {person.profile_url ? (
+                        {person.profile_path ? (
                           <img
-                            src={person.profile_url}
+                            src={person.profile_path}
                             alt={person.name}
                             className="w-12 h-12 rounded-full object-cover"
                           />
