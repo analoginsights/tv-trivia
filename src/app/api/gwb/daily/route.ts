@@ -27,7 +27,15 @@ export async function GET(request: NextRequest) {
       return new NextResponse(null, { status: 204 })
     }
     
-    const person = dailyData.gwb_people
+    // Handle case where gwb_people might be an array
+    const person = Array.isArray(dailyData.gwb_people) 
+      ? dailyData.gwb_people[0] 
+      : dailyData.gwb_people
+    
+    if (!person) {
+      console.log('Person data not found')
+      return new NextResponse(null, { status: 204 })
+    }
     
     // Use the image URL from the database or fallback to storage
     let imageUrl = person.image_url
