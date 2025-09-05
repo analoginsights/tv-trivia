@@ -28,7 +28,7 @@ export async function generateDailyPuzzle(date?: Date): Promise<string> {
   
   // Build show -> people map
   const showPeople: ShowPeople = {}
-  appearances.forEach(({ show_id, person_id }) => {
+  appearances.forEach(({ show_id, person_id }: { show_id: number; person_id: number }) => {
     if (!showPeople[show_id]) {
       showPeople[show_id] = new Set()
     }
