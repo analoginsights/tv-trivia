@@ -39,7 +39,7 @@ export default function Typeahead({
   
   const inputRef = useRef<HTMLInputElement>(null)
   const suggestionsRef = useRef<HTMLDivElement>(null)
-  const debounceRef = useRef<NodeJS.Timeout>()
+  const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
   // Debounced search function
   const searchSuggestions = useCallback(async (query: string) => {
